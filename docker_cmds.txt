@@ -1,0 +1,77 @@
+DockerHub
+username : snisinha
+pwd : SniiDeL@2024
+
+Ubuntu
+uname : snisinha
+pwd : SniiSinHa@102
+
+Docker commands 
+--------------------
+
+docker run imagename : runs docker image
+- docker run hello-world : prints hello world document
+- docker run busybox echo hi there : uses busybox image to echo hi there on terminal
+- docker run busybox ls : lists all folders present in busybox 
+
+docker ps : list all crunning containers
+- docker ps --all : lists all containers ever created on the system
+
+docker run = docker create + docker start
+
+docker create containername : to create new container (outputs containerid)
+docker start -a containerid : to run container
+docker system prune : remove all containers
+
+docker logs containerid : getting a log of all the outputs emitted from container
+
+docker stop containerid : stop command providing time for cleanup
+docker kill containerid : stop command immediately
+ - kill command sent automatically if stop does not work within 10s
+
+docker exec -it containerid command : execute an additional command in a container
+* -it flag : allows us to provide input 
+- docker exec -it containerid sh : opens up terminal inside container
+- docker run -it imagename sh : starts empty container and runs shell
+
+** two simultaneous running containers do not share a file system unless explicitly connected
+
+create dockerfile : configure to define how container behaves
+pass to docker cli -> pass to docker server -> creates usable image 
+
+Dockerfile : 1. specify base image
+	     2. run some commands to install additional programs
+	     3. specify command to run on container startup
+
+docker build . : runs dockerfile present in directory to build image
+docker build -t customname:version . : builds image with a custom name
+
+* to manually build docker image using docker commit 
+1. docker run -it imagename sh : to create container and run shell in already existing image
+2. (inside shell) : apk add --update imagename : basically run command from dockerfile
+3. (in diff terminal) : docker commit -c 'CMD line dockerfile' containerid customname\
+4. docker run customimagename/id
+
+
+copy ./ ./ 
+./ (1) : path to folder to copy from on "your machine" relative to build context
+./ (2) : plcae to copy stuff to inside the container
+
+docker run -p port1:port2 imagename : docker run with port mapping to lift runtime constraint on incoming port traffic to container
+- port1 : route incoming requests to this port on local host to port2 inside container
+
+
+WORKDIR /usr/app : any following command will be executed relative to this path in the container
+
+
+Docker Compose 
+- separate CLI that gets installed along with Docker
+- used to start up multiple Docker containers aat the same time
+- automates some of the repetitive code passed to 'docker run'
+
+docker run myimage => docker-compose up
+docker build . + docker run myimage => docker-compose up --build
+
+docker-compose up -d : launch multiple containers in background
+docker-compose down : stop containers
+docker-compose ps : to view status of running containers
